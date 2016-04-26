@@ -1,8 +1,9 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <math.h>
+#include <stdlib.h>
 
-#define err 0.00001
+#define err  0.00001
+#define err2 0.000001
 
 float f(float x)
 {
@@ -11,7 +12,7 @@ float f(float x)
 	// return 0.5*exp(x/3) - sin(x); // 1.c
 }
 
-int main(int argc,char **argv)
+int main(int argc, char **argv)
 {
 	float x0,x1,x2;
 
@@ -23,15 +24,19 @@ int main(int argc,char **argv)
 		"x0", "x1", "f(x0)", "f(x1)", "x2", "f(x2)");
 	do
 	{
-		x2=(x0+x1)/2;
-		printf("%10.5f %10.5f %10.5f %10.5f %10.5f %10.5f\n",
+		x2=x1-((f(x1)*(x1-x0))/(f(x1)-f(x0)));
+		printf("%10.4f %10.4f %10.4f %10.4f %10.4f %10.4f\n",
 			x0,x1,f(x0),f(x1),x2,f(x2));
-		if(f(x0)*f(x2)<0) x1=x2;
-		else x0=x2;
+		if(fabs(f(x2))<err2) {
+			x0=x2;
+			x1=x2;
+		} else {
+			if(f(x0)*f(x2)<0) x1=x2;
+			else x0=x2;
+		}
 	}
 	while(fabs(x0-x1)>err);
 
 	printf("Hasil = %.5f\n",x2);
 	return 0;
 }
-
